@@ -3,41 +3,293 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Loading</title>
+    <title>Three Man Down - Loading</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <section>
-        <div class="loader">
-            <span style="--i:1;"></span>
-            <span style="--i:2;"></span>
-            <span style="--i:3;"></span>
-            <span style="--i:4;"></span>
-            <span style="--i:5;"></span>
-            <span style="--i:6;"></span>
-            <span style="--i:7;"></span>
-            <span style="--i:8;"></span>
-            <span style="--i:9;"></span>
-            <span style="--i:10;"></span>
-            <span style="--i:11;"></span>
-            <span style="--i:12;"></span>
-            <span style="--i:13;"></span>
-            <span style="--i:14;"></span>
-            <span style="--i:15;"></span>
-            <span style="--i:16;"></span>
-            <span style="--i:17;"></span>
-            <span style="--i:18;"></span>
-            <span style="--i:19;"></span>
-            <span style="--i:20;"></span>
+    <div class="loading-container">
+        <div class="band-title">Three Man Down</div>
+        
+        <div class="record-player">
+            <div class="record"></div>
+            <div class="band-logo"></div>
+            <div class="record-arm"></div>
         </div>
-    </section>
+        
+        <div class="equalizer">
+            <!-- Equalizer bars will be added by JavaScript -->
+        </div>
+        
+        <div class="song-info">กำลังโหลดหน้าหลัก</div>
+        <div class="loading-text">กำลังโหลด</div>
+        
+        <div class="progress-container">
+            <div class="progress-bar"></div>
+        </div>
+        
+        <div class="interact-text">คลิกที่แผ่นเสียงเพื่อเร่งโหลด</div>
+        
+        <div class="particles"></div>
+        
+        <div class="sound-waves">
+            <div class="wave" style="animation-delay: 0s;"></div>
+            <div class="wave" style="animation-delay: 1s;"></div>
+            <div class="wave" style="animation-delay: 2s;"></div>
+            <div class="wave" style="animation-delay: 3s;"></div>
+        </div>
+        
+        <div class="interactive-elements">
+            <div class="volume-control">
+                <div class="volume-slider">
+                    <div class="volume-level"></div>
+                </div>
+                <div class="volume-icon"></div>
+            </div>
+        </div>
+    </div>
 
     <script>
+        // Create equalizer bars
+        const equalizer = document.querySelector('.equalizer');
+        const barCount = 20;
+        
+        for (let i = 0; i < barCount; i++) {
+            const bar = document.createElement('div');
+            bar.classList.add('bar');
+            
+            // Random heights for equalizer effect
+            const minHeight = 10 + Math.random() * 30;
+            const maxHeight = 50 + Math.random() * 50;
+            bar.style.setProperty('--min-height', `${minHeight}px`);
+            bar.style.setProperty('--max-height', `${maxHeight}px`);
+            
+            // Random animation duration
+            const duration = 0.5 + Math.random() * 1;
+            bar.style.animationDuration = `${duration}s`;
+            
+            // Random animation delay
+            const delay = Math.random() * 1;
+            bar.style.animationDelay = `${delay}s`;
+            
+            equalizer.appendChild(bar);
+        }
+        
+        // Create musical note particles
+        const particlesContainer = document.querySelector('.particles');
+        const particleCount = 30;
+        const particleTypes = ['note-1', 'note-2', 'guitar', 'drum'];
+        
+        for (let i = 0; i < particleCount; i++) {
+            const particle = document.createElement('div');
+            particle.classList.add('particle');
+            
+            // Add random particle type
+            const particleType = particleTypes[Math.floor(Math.random() * particleTypes.length)];
+            particle.classList.add(particleType);
+            
+            // Random size
+            const size = 20 + Math.random() * 30;
+            particle.style.width = `${size}px`;
+            particle.style.height = `${size}px`;
+            
+            // Random starting position (off screen)
+            const side = Math.floor(Math.random() * 4); // 0: top, 1: right, 2: bottom, 3: left
+            let x, y, dx, dy;
+            
+            switch (side) {
+                case 0: // top
+                    x = Math.random() * window.innerWidth;
+                    y = -size;
+                    dx = (Math.random() - 0.5) * 200;
+                    dy = 100 + Math.random() * 200;
+                    break;
+                case 1: // right
+                    x = window.innerWidth + size;
+                    y = Math.random() * window.innerHeight;
+                    dx = -(100 + Math.random() * 200);
+                    dy = (Math.random() - 0.5) * 200;
+                    break;
+                case 2: // bottom
+                    x = Math.random() * window.innerWidth;
+                    y = window.innerHeight + size;
+                    dx = (Math.random() - 0.5) * 200;
+                    dy = -(100 + Math.random() * 200);
+                    break;
+                case 3: // left
+                    x = -size;
+                    y = Math.random() * window.innerHeight;
+                    dx = 100 + Math.random() * 200;
+                    dy = (Math.random() - 0.5) * 200;
+                    break;
+            }
+            
+            particle.style.setProperty('--x', `${x}px`);
+            particle.style.setProperty('--y', `${y}px`);
+            particle.style.setProperty('--dx', `${dx}px`);
+            particle.style.setProperty('--dy', `${dy}px`);
+            
+            // Random animation duration and delay
+            const duration = 5 + Math.random() * 10;
+            particle.style.animationDuration = `${duration}s`;
+            
+            const delay = Math.random() * 10;
+            particle.style.animationDelay = `${delay}s`;
+            
+            particlesContainer.appendChild(particle);
+        }
+        
+        // Interactive record player
+        const record = document.querySelector('.record');
+        let clickCount = 0;
+        const loadingMessages = [
+            "กำลังโหลดหน้าหลัก",
+            "กำลังโหลดประวัติวง",
+            "กำลังโหลดคอนเสิร์ต",
+            "กำลังเตรียมข้อมูล",
+            "Three Man Down"
+        ];
+        let currentMessage = 0;
+        
+        record.addEventListener('click', () => {
+            clickCount++;
+            
+            // Speed up record rotation
+            record.style.animationDuration = `${5 - (clickCount * 0.5)}s`;
+            
+            // Update song info
+            currentMessage = (currentMessage + 1) % loadingMessages.length;
+            document.querySelector('.song-info').textContent = loadingMessages[currentMessage];
+            
+            // Create explosion effect
+            const explosion = document.createElement('div');
+            explosion.style.position = 'absolute';
+            explosion.style.width = '300px';
+            explosion.style.height = '300px';
+            explosion.style.top = '0';
+            explosion.style.left = '0';
+            explosion.style.borderRadius = '50%';
+            explosion.style.background = 'radial-gradient(circle, rgba(255,0,255,0.5) 0%, rgba(255,0,255,0) 70%)';
+            explosion.style.animation = 'explode 0.5s ease-out forwards';
+            
+            document.querySelector('.record-player').appendChild(explosion);
+            
+            setTimeout(() => {
+                explosion.remove();
+            }, 500);
+            
+            if (clickCount >= 5) {
+                // Redirect faster if clicked enough times
+                setTimeout(() => {
+                    window.location.href = './Home page/index.html';
+                }, 1000);
+            }
+        });
+        
+        // Creating explosion animation
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes explode {
+                0% { transform: scale(0); opacity: 0.5; }
+                100% { transform: scale(2); opacity: 0; }
+            }
+        `;
+        document.head.appendChild(style);
+        
+        // Update loading messages
+        const songInfo = document.querySelector('.song-info');
+        setInterval(() => {
+            currentMessage = (currentMessage + 1) % loadingMessages.length;
+            songInfo.textContent = loadingMessages[currentMessage];
+        }, 2000);
+        
+        // Update loading text
+        const loadingText = document.querySelector('.loading-text');
+        const loadingPhrases = ['กำลังโหลด', 'Three Man Down', 'กำลังเตรียมข้อมูล', 'เกือบเสร็จแล้ว'];
+        let phraseIndex = 0;
+        
+        setInterval(() => {
+            phraseIndex = (phraseIndex + 1) % loadingPhrases.length;
+            loadingText.textContent = loadingPhrases[phraseIndex];
+        }, 1500);
+        
+        // Progress bar animation
+        setTimeout(() => {
+            document.querySelector('.progress-bar').style.width = '100%';
+        }, 100);
+        
+        // Redirect after loading
         window.addEventListener('load', function() {
             setTimeout(function() {
-                window.location.href = './Home page/index.html'; // เปลี่ยนไปที่หน้า index.html
-            }, 7000); // 5000 milliseconds = 5 seconds
+                window.location.href = './Home page/index.html';
+            }, 7000);
         });
+
+        // Volume control
+        const volumeSlider = document.querySelector('.volume-slider');
+        const volumeLevel = document.querySelector('.volume-level');
+        const volumeIcon = document.querySelector('.volume-icon');
+
+        let isDragging = false;
+        let volume = 0.5;
+
+        volumeSlider.addEventListener('mousedown', () => {
+            isDragging = true;
+        });
+
+        window.addEventListener('mousemove', (e) => {
+            if (isDragging) {
+                const rect = volumeSlider.getBoundingClientRect();
+                let newVolume = 1 - (e.clientY - rect.top) / rect.height;
+                newVolume = Math.max(0, Math.min(1, newVolume));
+                volumeLevel.style.height = `${newVolume * 100}%`;
+                volume = newVolume;
+            }
+        });
+
+        window.addEventListener('mouseup', () => {
+            isDragging = false;
+        });
+
+        volumeIcon.addEventListener('click', () => {
+            if (volume > 0) {
+                volume = 0;
+                volumeLevel.style.height = '0';
+            } else {
+                volume = 0.5;
+                volumeLevel.style.height = '50%';
+            }
+        });
+
+        // Play sound waves
+        const soundWaves = document.querySelector('.sound-waves');
+        const waveCount = 4;
+
+        for (let i = 0; i < waveCount; i++) {
+            const wave = document.createElement('div');
+            wave.classList.add('wave');
+            wave.style.animationDelay = `${i * 0.5}s`;
+            soundWaves.appendChild(wave);
+        }
+
+        // Play sound waves on click
+        record.addEventListener('click', () => {
+            soundWaves.style.animation = 'none';
+            void soundWaves.offsetWidth; // Trigger reflow
+            soundWaves.style.animation = null;
+        });
+
+        // Play sound waves on volume change
+
+        let lastVolume = volume;
+        setInterval(() => {
+            if (volume !== lastVolume) {
+                soundWaves.style.animation = 'none';
+                void soundWaves.offsetWidth; // Trigger reflow
+                soundWaves.style.animation = null;
+                lastVolume = volume;
+            }
+        }, 100);
+
     </script>
 </body>
 </html>

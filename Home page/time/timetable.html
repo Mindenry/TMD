@@ -3,26 +3,301 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css">
-    <link rel="stylesheet" href="style.css">
-    <title>Events Ticket Card</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Kanit:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <title>Concert Ticket Cards | Three Man Down Tour 2024</title>
+    <style>
+        :root {
+            --primary-color: #6a11cb;
+            --gradient-color: linear-gradient(45deg, #6a11cb 0%, #2575fc 100%);
+            --card-bg: rgba(255, 255, 255, 0.95);
+            --text-primary: #333;
+            --text-secondary: #666;
+            --accent-color: #ff3e6c;
+            --sold-out-color: #ff3e6c;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Montserrat', 'Kanit', sans-serif;
+        }
+        
+        body {
+            background-image: url('https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            min-height: 100vh;
+            padding: 40px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+        
+        body::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: -1;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            color: white;
+            width: 100%;
+            max-width: 800px;
+        }
+        
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            background: var(--gradient-color);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 700;
+        }
+        
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 30px;
+            width: 100%;
+            max-width: 1200px;
+        }
+        
+        .item-container {
+            background: var(--card-bg);
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+            position: relative;
+            height: 500px;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .item-container:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+        }
+        
+        .img-container {
+            height: 40%;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .img-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+        
+        .item-container:hover .img-container img {
+            transform: scale(1.1);
+        }
+        
+        .sold-out-badge {
+            position: absolute;
+            top: 20px;
+            right: -30px;
+            background: var(--sold-out-color);
+            color: white;
+            padding: 5px 40px;
+            transform: rotate(45deg);
+            font-weight: 600;
+            font-size: 0.8rem;
+            z-index: 10;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+        
+        .body-container {
+            padding: 20px;
+            height: 60%;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+        
+        .event-info {
+            flex: 1;
+        }
+        
+        .title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-bottom: 5px;
+        }
+        
+        .separator {
+            width: 50px;
+            height: 3px;
+            background: var(--gradient-color);
+            margin: 8px 0 12px;
+            border-radius: 10px;
+        }
+        
+        .info {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .info i {
+            margin-right: 8px;
+            color: var(--primary-color);
+        }
+        
+        .location-info {
+            font-weight: 500;
+            font-size: 1.1rem;
+            color: var(--text-primary);
+            margin-bottom: 5px;
+        }
+        
+        .price {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--accent-color);
+            margin: 12px 0;
+        }
+        
+        .description {
+            margin-top: 10px;
+            line-height: 1.5;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+        }
+        
+        .description span {
+            color: var(--primary-color);
+            font-weight: 500;
+            cursor: pointer;
+        }
+        
+        .action {
+            background: var(--gradient-color);
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 15px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .action:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(106, 17, 203, 0.4);
+        }
+        
+        .action i {
+            transition: transform 0.3s ease;
+        }
+        
+        .action:hover i {
+            transform: translateX(4px);
+        }
+        
+        .sold-out .action {
+            background: #888;
+            cursor: not-allowed;
+        }
+        
+        .sold-out .action:hover {
+            transform: none;
+            box-shadow: none;
+        }
+        
+        .countdown {
+            display: inline-block;
+            margin-left: 10px;
+            font-size: 0.8rem;
+            color: var(--accent-color);
+            font-weight: 600;
+        }
+        
+        .feature-badge {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            background: rgba(255, 255, 255, 0.9);
+            color: var(--primary-color);
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .header p {
+                font-size: 0.9rem;
+            }
+        }
+    </style>
 </head>
 <body>
+    <div class="header">
+        <h1>THREE MAN DOWN BASIC TOUR 2024</h1>
+        <p>การออกเดินทางครั้งใหญ่ที่จะไปพบเจอกับทุกคนถึงที่ใน 4 ภาคของประเทศไทย</p>
+    </div>
+
     <div class="container">
         <div class="item-container">
+            <div class="feature-badge">
+                <i class="fas fa-fire"></i> มาแรง
+            </div>
             <div class="img-container">
-                <img src="./img/basic.jpg" alt="Event image">
+                <img src="./img/basic.jpg" alt="Khon Kaen concert">
             </div>
 
             <div class="body-container">
-                <div class="overlay"></div>
-
                 <div class="event-info">
                     <p class="title">Basic Tour</p>
                     <div class="separator"></div>
-                    <p class="info">Khon Kaen</p>
-                    <p class="price">฿2,000</p>
+                    <p class="location-info">Khon Kaen</p>
+                    <p class="price">฿2,000 <span class="countdown">เหลืออีก 5 วัน</span></p>
 
                     <div class="additional-info">
                         <p class="info">
@@ -31,32 +306,35 @@
                         </p>
                         <p class="info">
                             <i class="far fa-calendar-alt"></i>
-                            SAT, 6 July 2024 , 18:00 - 20.00
+                            เสาร์, 6 กรกฎาคม 2567, 18:00 - 20:00 น.
                         </p>
 
                         <p class="info description">
-                            Three Man Down 'BASIC TOUR'
-                            การออกเดินทางครั้งใหญ่ ที่จะไปพบเจอกับทุกคนถึงที่ใน 4 ภาคของประเทศไทย <span>more...</span>
+                            Three Man Down 'BASIC TOUR' การออกเดินทางครั้งใหญ่ ที่จะไปพบเจอกับทุกคนถึงที่ใน 4 ภาคของประเทศไทย ร่วมสร้างความประทับใจและความทรงจำดีๆ ไปด้วยกัน <span>อ่านเพิ่มเติม</span>
                         </p>
                     </div>
                 </div>
-                <button class="action">Read more</button>
+                <button class="action">
+                    จองตั๋วทันที
+                    <i class="fas fa-arrow-right"></i>
+                </button>
             </div>
         </div>
 
         <div class="item-container">
+            <div class="feature-badge">
+                <i class="fas fa-ticket-alt"></i> ใหม่
+            </div>
             <div class="img-container">
-                <img src="./img/siracha.jpg" alt="Event image">
+                <img src="./img/siracha.jpg" alt="Si Racha concert">
             </div>
 
             <div class="body-container">
-                <div class="overlay"></div>
-
                 <div class="event-info">
                     <p class="title">Basic Tour</p>
                     <div class="separator"></div>
-                    <p class="info">Si Racha</p>
-                    <p class="price">฿2,000</p>
+                    <p class="location-info">Si Racha</p>
+                    <p class="price">฿2,000 <span class="countdown">เหลืออีก 12 วัน</span></p>
 
                     <div class="additional-info">
                         <p class="info">
@@ -65,65 +343,66 @@
                         </p>
                         <p class="info">
                             <i class="far fa-calendar-alt"></i>
-                            WED, 13 July 2024 , 18:00 - 20.00
+                            พุธ, 13 กรกฎาคม 2567, 18:00 - 20:00 น.
                         </p>
 
                         <p class="info description">
-                            Three Man Down 'BASIC TOUR'
-                            การออกเดินทางครั้งใหญ่ ที่จะไปพบเจอกับทุกคนถึงที่ใน 4 ภาคของประเทศไทย <span>more...</span>
+                            Three Man Down 'BASIC TOUR' การออกเดินทางครั้งใหญ่ ที่จะไปพบเจอกับทุกคนถึงที่ใน 4 ภาคของประเทศไทย ร่วมสร้างความประทับใจและความทรงจำดีๆ ไปด้วยกัน <span>อ่านเพิ่มเติม</span>
                         </p>
                     </div>
                 </div>
-                <button class="action">Read more</button>
+                <button class="action">
+                    จองตั๋วทันที
+                    <i class="fas fa-arrow-right"></i>
+                </button>
             </div>
         </div>
 
         <div class="item-container">
             <div class="img-container">
-                <img src="./img/hatyai.jpg" alt="Event image">
+                <img src="./img/hatyai.jpg" alt="Hatyai concert">
             </div>
 
             <div class="body-container">
-                <div class="overlay"></div>
-
                 <div class="event-info">
                     <p class="title">Basic Tour</p>
                     <div class="separator"></div>
-                    <p class="info">Hatyai</p>
-                    <p class="price">฿2,000</p>
+                    <p class="location-info">Hatyai</p>
+                    <p class="price">฿2,000 <span class="countdown">เหลืออีก 19 วัน</span></p>
 
                     <div class="additional-info">
                         <p class="info">
                             <i class="fas fa-map-marker-alt"></i>
-                            หาดใหญ่ฮอลล์ ชั้น 5 ศูนย์การค้าเซ็นทรัล หาดใหญ่ 
+                            หาดใหญ่ฮอลล์ ชั้น 5 ศูนย์การค้าเซ็นทรัล หาดใหญ่
                         </p>
                         <p class="info">
                             <i class="far fa-calendar-alt"></i>
-                            SAT, 20 July 2024 , 18:00 - 20.00
+                            เสาร์, 20 กรกฎาคม 2567, 18:00 - 20:00 น.
                         </p>
 
                         <p class="info description">
-                            Three Man Down 'BASIC TOUR'
-                            การออกเดินทางครั้งใหญ่ ที่จะไปพบเจอกับทุกคนถึงที่ใน 4 ภาคของประเทศไทย <span>more...</span>
+                            Three Man Down 'BASIC TOUR' การออกเดินทางครั้งใหญ่ ที่จะไปพบเจอกับทุกคนถึงที่ใน 4 ภาคของประเทศไทย ร่วมสร้างความประทับใจและความทรงจำดีๆ ไปด้วยกัน <span>อ่านเพิ่มเติม</span>
                         </p>
                     </div>
                 </div>
-                <button class="action">Read more</button>
+                <button class="action">
+                    จองตั๋วทันที
+                    <i class="fas fa-arrow-right"></i>
+                </button>
             </div>
         </div>
 
-        <div class="item-container">
+        <div class="item-container sold-out">
+            <div class="sold-out-badge">SOLD OUT</div>
             <div class="img-container">
-                <img src="./img/sold.jpg" alt="Event image">
+                <img src="./img/sold.jpg" alt="Bangkok Marathon concert">
             </div>
 
             <div class="body-container">
-                <div class="overlay"></div>
-
                 <div class="event-info">
-                    <p class="title">MARATHON </p>
+                    <p class="title">MARATHON</p>
                     <div class="separator"></div>
-                    <p class="info">Bangkok</p>
+                    <p class="location-info">Bangkok</p>
                     <p class="price">฿1,500</p>
 
                     <div class="additional-info">
@@ -133,19 +412,43 @@
                         </p>
                         <p class="info">
                             <i class="far fa-calendar-alt"></i>
-                            SAT, 24 Aug 2024 , 15:00 - 23.00
+                            เสาร์, 24 สิงหาคม 2567, 15:00 - 23:00 น.
                         </p>
 
                         <p class="info description">
-                            กับงาน THE CONCERT APPLICATION PRESENTS GFEST MARATHON CONCERT 2024
-                            เทศกาลคอนเสิร์ตที่รวม 16 คอนเสิร์ตไว้บนเวทีเดียว <span>more...</span>
+                            กับงาน THE CONCERT APPLICATION PRESENTS GFEST MARATHON CONCERT 2024 เทศกาลคอนเสิร์ตที่รวม 16 คอนเสิร์ตไว้บนเวทีเดียว พบกับศิลปินชั้นนำของไทย <span>อ่านเพิ่มเติม</span>
                         </p>
                     </div>
                 </div>
-                <button class="action">Read more</button>
+                <button class="action">
+                    บัตรหมดแล้ว
+                </button>
             </div>
         </div>
     </div>
-    
+
+    <script>
+        // สำหรับฟังก์ชันการทำงานในอนาคต เช่น การนับถอยหลัง, การเปิดปิด description, และอื่นๆ
+        document.addEventListener('DOMContentLoaded', function() {
+            // ทำให้ปุ่ม "อ่านเพิ่มเติม" สามารถคลิกได้
+            const moreLinks = document.querySelectorAll('.description span');
+            moreLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    alert('แสดงรายละเอียดเพิ่มเติมเกี่ยวกับคอนเสิร์ต');
+                });
+            });
+            
+            // ทำให้ปุ่มจองตั๋วสามารถคลิกได้
+            const bookButtons = document.querySelectorAll('.action');
+            bookButtons.forEach(button => {
+                if (!button.parentElement.parentElement.classList.contains('sold-out')) {
+                    button.addEventListener('click', function() {
+                        alert('ไปยังหน้าจองตั๋ว');
+                    });
+                }
+            });
+        });
+    </script>
 </body>
 </html>
